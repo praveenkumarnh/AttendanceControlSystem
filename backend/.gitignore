@@ -1,0 +1,40 @@
+/build/
+/build.xml
+/manifest.mf
+/dist/
+/target/
+
+### VSCODE ###
+/.settings/
+/.vscode/
+
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### Netbeans ###
+
+/nbactions.xml
+/nb-configuration.xml
+/nbactions-release-profile.xml
+/.nb-gradle/
+/nbproject/
