@@ -135,7 +135,8 @@ public final class EmployeeHandler extends RequestHandler {
                 if (reply.succeeded()) {
                     handleSimpleSuccess(context, 201);
                 } else {
-                    LOGGER.error("DB Error result: " + employee.toString() + " and " + reply.cause().getMessage() + " from "
+                    LOGGER.error("DB Error result: " + employee.toString() + " and "
+                            + reply.cause().getMessage() + " from "
                             + context.request().remoteAddress());
 
                     fail(context, 500, reply.cause().getMessage());

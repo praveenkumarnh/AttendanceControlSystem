@@ -22,7 +22,9 @@ public final class TrackHandler extends RequestHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TrackHandler.class);
     private final TrackRepository repository;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault());
+    private final DateTimeFormatter formatter = DateTimeFormatter
+            .ofPattern("YYYY-MM-dd HH:mm:ss")
+            .withZone(ZoneId.systemDefault());
 
     public TrackHandler(Vertx vertx, Router router, TrackRepository repository) {
         super(vertx);
@@ -57,16 +59,19 @@ public final class TrackHandler extends RequestHandler {
                             repository.rxCreate(track, reply -> {
                                 if (reply.succeeded()) {
 
-                                    //Send a message to the consumers
+                                    //Send a message to the subscribers
                                     repository.rxFetchByid(track.getId(), arf -> {
                                         if (arf.succeeded()) {
-                                            getVertx().eventBus().publish("asiscontrol.client", arf.result());
+                                            getVertx()
+                                                    .eventBus()
+                                                    .publish("tracked.employee", arf.result());
                                         }
                                     });
 
                                     handleSimpleSuccess(context, 201);
                                 } else {
-                                    LOGGER.error("DB Error result: " + track.toString() + " and " + reply.cause().getMessage() + " from "
+                                    LOGGER.error("DB Error result: " + track.toString() + " and "
+                                            + reply.cause().getMessage() + " from "
                                             + context.request().remoteAddress());
 
                                     fail(context, 500, reply.cause().getMessage());

@@ -71,8 +71,7 @@ public class EmployeeRepository extends Repository {
 
     public EmployeeRepository rxUpdate(int code, Employee employee, Handler<AsyncResult<Void>> resultHandler) {
 
-        String sql = "UPDATE employees SET code = ?, firstName = ?, lastName = ?,"
-                + "email = ?, avatar = ? WHERE code = ?";
+        String sql = "UPDATE employees SET code = ?, firstName = ?, lastName = ?, email = ?, avatar = ? WHERE code = ?";
 
         getClient().rxUpdateWithParams(sql, employee.toJsonOArray().add(code))
                 .toCompletable().subscribe(CompletableHelper.toObserver(resultHandler));

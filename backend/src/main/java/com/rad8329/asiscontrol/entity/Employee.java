@@ -3,7 +3,6 @@ package com.rad8329.asiscontrol.entity;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
-@SuppressWarnings("unused")
 public class Employee implements Entity {
 
     private final int code;
@@ -38,13 +37,6 @@ public class Employee implements Entity {
 
     public String getAvatar() {
         return avatar;
-    }
-
-    @Override
-    public String toString() {
-        return "Employee{" + "code=" + code + ", firstName=" + firstName
-                + ", lastName=" + lastName + ", email=" + email
-                + ", avatar=" + avatar + '}';
     }
 
     @Override
@@ -109,5 +101,12 @@ public class Employee implements Entity {
             json.addNull();
 
         return json;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" + "code=" + code + ", firstName='" + firstName
+                + "', lastName='" + lastName + "', email='" + email
+                + "', avatar='" + avatar + '}';
     }
 }

@@ -15,7 +15,6 @@ import io.vertx.reactivex.ext.sql.SQLConnection;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class TrackRepository extends Repository {
 
     public TrackRepository(JDBCClient client) {
@@ -29,9 +28,10 @@ public class TrackRepository extends Repository {
         });
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     public TrackRepository rxFetchAll(Handler<AsyncResult<JsonArray>> resultHandler) {
-        getClient().rxQuery("SELECT * FROM tracks t JOIN employees e ON e.code = t.employeeCode").flatMapPublisher(result -> {
+        String sql = "SELECT * FROM tracks t JOIN employees e ON e.code = t.employeeCode";
+
+        getClient().rxQuery(sql).flatMapPublisher(result -> {
             List<JsonArray> results = result.getResults();
 
             return Flowable.fromIterable(results);
@@ -41,7 +41,6 @@ public class TrackRepository extends Repository {
         return this;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     public TrackRepository rxFetchByid(String id, Handler<AsyncResult<JsonObject>> resultHandler) {
         String sql = "SELECT * FROM tracks t JOIN employees e ON e.code = t.employeeCode WHERE id = ?";
 
@@ -69,7 +68,6 @@ public class TrackRepository extends Repository {
         return this;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     public TrackRepository rxFetchLastActionFromEmployee(int code, Handler<AsyncResult<String>> resultHandler) {
         String sql = "SELECT action FROM tracks WHERE employeeCode = ? ORDER BY createdAt DESC LIMIT 1";
 
@@ -85,7 +83,6 @@ public class TrackRepository extends Repository {
         return this;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     public TrackRepository rxCreate(Track track, Handler<AsyncResult<Void>> resultHandler) {
         getClient().rxUpdateWithParams("INSERT INTO tracks VALUES(?,?,?,?)", track.toJsonOArray()).toCompletable()
                 .subscribe(CompletableHelper.toObserver(resultHandler));
@@ -93,7 +90,6 @@ public class TrackRepository extends Repository {
         return this;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     public TrackRepository rxFetchAllData(Handler<AsyncResult<List<JsonObject>>> resultHandler) {
         String sql = "SELECT * FROM tracks t JOIN employees e ON e.code = t.employeeCode ORDER BY createdAt DESC";
 

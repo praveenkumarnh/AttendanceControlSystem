@@ -7,10 +7,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 import java.util.Date;
 
-@SuppressWarnings("unused")
 public class Track implements Entity {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault());
+    private final DateTimeFormatter formatter = DateTimeFormatter.
+            ofPattern("YYYY-MM-dd HH:mm:ss")
+            .withZone(ZoneId.systemDefault());
 
     private final String id;
     private final int employeeCode;

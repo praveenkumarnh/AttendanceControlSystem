@@ -1,7 +1,6 @@
 {
   "http.port": 8083,
   "db.url": "jdbc:mysql:///asiscontrol?&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
-  
   "db.username": "root",
   "db.password": "root",
   "db.maximumPoolSize": 8

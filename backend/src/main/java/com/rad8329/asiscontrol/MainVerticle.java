@@ -25,7 +25,7 @@ public class MainVerticle extends AbstractVerticle {
 
     @Override
     public void start(Future<Void> startFuture) {
-        LOGGER.info("Starting " + vertx.hashCode() + "...");
+        LOGGER.info("Starting verticle...");
 
         prepareDatabase().compose(_void -> startHttpServer()).setHandler(startFuture.completer());
     }
@@ -63,8 +63,7 @@ public class MainVerticle extends AbstractVerticle {
 
         //tag::sockjs-handler-setup[]
         BridgeOptions opts = new BridgeOptions()
-                .addInboundPermitted(new PermittedOptions().setAddress("asiscontrol.server"))
-                .addOutboundPermitted(new PermittedOptions().setAddress("asiscontrol.client"));
+                .addOutboundPermitted(new PermittedOptions().setAddress("tracked.employee"));
 
         SockJSHandler sockeJsHandler = SockJSHandler.create(vertx).bridge(opts);
 
@@ -97,6 +96,6 @@ public class MainVerticle extends AbstractVerticle {
 
     @Override
     public void stop() {
-        LOGGER.info("Stopping " + vertx.hashCode() + "...");
+        LOGGER.info("Stopping verticle...");
     }
 }
