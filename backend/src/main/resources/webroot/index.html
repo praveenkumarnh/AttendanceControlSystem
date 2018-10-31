@@ -1,4 +1,5 @@
 <html>
+
 <head>
     <title>AttendanceControlSystem</title>
     <meta charset="UTF-8">
@@ -26,15 +27,16 @@
         }
     </style>
 </head>
+
 <body>
 <script type="text/javascript">
     const eventBus = new EventBus("/eventbus/");
 
     eventBus.onopen = function () {
-        eventBus.registerHandler("tracked.employee", function (err, msg) {
-            let action = msg.body.action === "entrance" ? "entered" : "left";
+        eventBus.registerHandler('tracked.employee', function (err, msg) {
+            let action = msg.body.action === 'entrance' ? 'entered' : 'left';
 
-            $("#employees-track-list").append(
+            $('#employees-track-list').append(
                 `<div><strong>[${msg.body.createdAt}]</strong> ` +
                 `<i>${msg.body.firstName} ${msg.body.lastName}</i> just ${action}</div>\n`
             );
@@ -44,4 +46,5 @@
 <div id="employees-track-list" class="inset">
 </div>
 </body>
+
 </html>
