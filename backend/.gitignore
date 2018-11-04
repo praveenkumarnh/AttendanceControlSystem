@@ -38,3 +38,8 @@
 /nbactions-release-profile.xml
 /.nb-gradle/
 /nbproject/
+
+
+# VERTX
+
+.vertx
