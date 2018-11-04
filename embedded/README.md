@@ -8,4 +8,4 @@
 
 ## Schematics
 
-![schematics](https://raw.githubusercontent.com/rad8329/AttendanceControlSystem/tree/master/embedded/asiscontrol.png)
+![schematics](https://raw.githubusercontent.com/rad8329/AttendanceControlSystem/master/embedded/schematics/asiscontrol.png)
