@@ -2,7 +2,7 @@
 
 Simple API built on top of Vert.x
 
-## endponits
+## Endpoints
 
 ### Tracks
 
