@@ -6,10 +6,11 @@
 - Ethernet Shield x 1
 - RFID-RC522 x 1
 - Micro SD card x 1
+- 220Ω Resistor x 1
 
-## Schematics
+## Schemas
 
-![schematics](https://raw.githubusercontent.com/rad8329/AttendanceControlSystem/master/embedded/schematics/asiscontrol.png)
+![schematics](https://raw.githubusercontent.com/rad8329/AttendanceControlSystem/master/embedded/schematics/fritzing_bb.png)
 
 
 ## Clarification
