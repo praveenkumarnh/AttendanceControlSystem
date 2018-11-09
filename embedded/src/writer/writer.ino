@@ -1,7 +1,7 @@
 /**
  * Based on code by Rudy Schlaf 
  * 
- * This sketch uses the MFRC522 Library to use ARDUINO RFID MODULE KIT 13.56 MHZ WITH TAGS SPI W/R
+ * This sketch uses the MFRC522 Library to use ARDUINO RFID MODULE KIT 13.56 MHZ WITH TAGS SPI (Write/Read)
  */
  
 #include <SPI.h>
@@ -41,8 +41,7 @@ void setup()
   // Prepare key - all keys are set to FFFFFFFFFFFFh at chip delivery from the factory.
   for (byte i = 0; i < 6; i++) {
     key.keyByte[i] = 0xFF;
-  }
-  //20 20  20 20 20 20
+  }  
   //end::prepare-keys[]
 
   Serial.print("]\nScanning for a RFID card (MIFARE Classic PICC) ...\n");
@@ -79,7 +78,9 @@ void loop()
           &&  piccType != MFRC522::PICC_TYPE_MIFARE_1K
           &&  piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
     Serial.print("\nThis program only works with MIFARE Classic cards.");
-    exitMessage();
+    
+    Serial.print("\n**** Take away the RFID-card ****");
+    delay(5000); //Some delay to be sure that the current RFID-card was move away
     return;
   }
   //tag::check-compatibility[]
@@ -89,22 +90,17 @@ void loop()
   inputBlock("firstname", blockcontent);
  
   if (writeBlock(FIRSTNAME_BLOCKNUMBER , blockcontent) == 1) {
+    // we should check if everything was fine, but we could write, then read also
     displayBlock(FIRSTNAME_BLOCKNUMBER, readbackblock);
-
-    memset(blockcontent, 0, sizeof(blockcontent)); //Clear
-    memset(readbackblock, 0, sizeof(readbackblock)); //Clear
-
     inputBlock("lastname", blockcontent);
 
     if (writeBlock(LASTNAME_BLOCKNUMBER , blockcontent) == 1) {
+      // we should check if everything was fine, but we could write, then read also
       displayBlock(LASTNAME_BLOCKNUMBER, readbackblock);
-
-      memset(blockcontent, 0, sizeof(blockcontent)); //Clear
-      memset(readbackblock, 0, sizeof(readbackblock)); //Clear
-
       inputBlock("code", blockcontent);
          
       if (writeBlock(CODE_BLOCKNUMBER , blockcontent) == 1) {
+        // we should check if everything was fine, but we could write, then read also
         displayBlock(CODE_BLOCKNUMBER, readbackblock);
       }
     }
@@ -113,5 +109,6 @@ void loop()
   mfrc522.PICC_HaltA();      // Halt PICC
   mfrc522.PCD_StopCrypto1(); // Stop encryption on PCD
 
-  exitMessage();
+  Serial.print("\n**** Take away the RFID-card ****");
+  delay(5000); //Some delay to be sure that the current RFID-card was move away
 }
