@@ -6,8 +6,9 @@ int writeBlock(int blockNumber, byte arrayAddress[])
   int largestModulo4Number = blockNumber / 4 * 4;
   int trailerBlock = largestModulo4Number + 3; //determine trailer block for the sector
   Serial.print("\n");
-  if (blockNumber > 2 && (blockNumber + 1) % 4 == 0) {
-    Serial.print(blockNumber);  //block number is a trailer block (modulo 4); quit and send error code 2
+  if (blockNumber > 2 && (blockNumber + 1) % 4 == 0)
+  {
+    Serial.print(blockNumber); //block number is a trailer block (modulo 4); quit and send error code 2
     Serial.print(" is a trailer block.");
     return 2;
   }
@@ -29,14 +30,16 @@ int writeBlock(int blockNumber, byte arrayAddress[])
   // New cards have all A/B= FF FF FF FF FF FF
   // Uid *uid is a pointer to the UID struct that contains the user ID of the card.
 
-  if (status != MFRC522::STATUS_OK) {
+  if (status != MFRC522::STATUS_OK)
+  {
     Serial.print("\nPCD_Authenticate(wirte) [FAILED] ");
     Serial.print(mfrc522.GetStatusCodeName(status));
     Serial.print("\n");
-    return 3;//return "3" as error message
+    return 3; //return "3" as error message
   }
-  else {
-    Serial.print("\nPCD_Authenticate(wirte) [0K]\n");    
+  else
+  {
+    Serial.print("\nPCD_Authenticate(wirte) [0K]\n");
   }
   // it appears the authentication needs to be made before every block
   // read/write within a specific sector.
@@ -49,11 +52,12 @@ int writeBlock(int blockNumber, byte arrayAddress[])
   // byte array containing 16 values, number of bytes in block (=16))
   status = mfrc522.MIFARE_Write(blockNumber, arrayAddress, 16);
   //status = mfrc522.MIFARE_Write(9, value1Block, 16);
-  if (status != MFRC522::STATUS_OK) {
+  if (status != MFRC522::STATUS_OK)
+  {
     Serial.print("\nMIFARE_Write() [FAILED] ");
     Serial.print(mfrc522.GetStatusCodeName(status));
     Serial.print("\n");
-    return 4;//return "4" as error message
+    return 4; //return "4" as error message
   }
   //end::writing-block[]
 
@@ -78,13 +82,16 @@ int readBlock(int blockNumber, byte arrayAddress[])
   // this struct needs to be defined for each block.
   // New cards have all A/B= FF FF FF FF FF FF
   // Uid *uid is a pointer to the UID struct that contains the user ID of the card.
-  if (status != MFRC522::STATUS_OK) {
+  if (status != MFRC522::STATUS_OK)
+  {
     Serial.print("PCD_Authenticate(read) [FAILED]");
     Serial.print(mfrc522.GetStatusCodeName(status));
     Serial.print("\n");
-    return 3;//return "3" as error message
-  } else {
-    Serial.print("PCD_Authenticate(read) [0K]\n");    
+    return 3; //return "3" as error message
+  }
+  else
+  {
+    Serial.print("PCD_Authenticate(read) [0K]\n");
   }
   //it appears the authentication needs to be made before every block read/write within a specific sector.
   //If a different sector is being authenticated access to the previous one is lost.
@@ -97,18 +104,20 @@ int readBlock(int blockNumber, byte arrayAddress[])
   // &buffersize is a pointer to the buffersize variable;
   // MIFARE_Read requires a pointer instead of just a number
   status = mfrc522.MIFARE_Read(blockNumber, arrayAddress, &buffersize);
-  if (status != MFRC522::STATUS_OK) {
+  if (status != MFRC522::STATUS_OK)
+  {
     Serial.print("MIFARE_read() [FAILED] ");
     Serial.print(mfrc522.GetStatusCodeName(status));
     Serial.print("\n");
-    return 4;//return "4" as error message
+    return 4; //return "4" as error message
   }
 
   Serial.println("MIFARE_read() [0K]");
   return 1;
 }
 
-void inputBlock(String label, byte *blockcontent) {
+void inputBlock(String label, byte *blockcontent)
+{
   Serial.print("\nType " + label + ", ending with #");
   byte lenght = Serial.readBytesUntil('#', (char *)blockcontent, 18); // read input from serial
 
@@ -116,21 +125,24 @@ void inputBlock(String label, byte *blockcontent) {
     blockcontent[i] = '_'; // pad with spaces
 }
 
-void displayBlock(int blocknumber, byte *readbackblock) {
-  readBlock(blocknumber, readbackblock);//read the block back  
+void displayBlock(int blocknumber, byte *readbackblock)
+{
+  readBlock(blocknumber, readbackblock); //read the block back
 
-  for (int j = 0 ; j < 16 ; j++) //print the block contents
+  for (int j = 0; j < 16; j++) //print the block contents
   {
     //Serial.write() transmits the ASCII numbers as human readable characters to serial monitor
-    Serial.write (readbackblock[j]);
+    Serial.write(readbackblock[j]);
   }
 
   Serial.print("\n");
 }
 
-void dumpBytetoArray(byte *buffer, byte bufferSize) {
+void dumpBytetoArray(byte *buffer, byte bufferSize)
+{
   //Helper routine to dump a byte array as hex values to Serial.
-  for (byte i = 0; i < bufferSize; i++) {
+  for (byte i = 0; i < bufferSize; i++)
+  {
     Serial.print(buffer[i] < 0x10 ? " 0" : " ");
     Serial.print(buffer[i], HEX);
   }

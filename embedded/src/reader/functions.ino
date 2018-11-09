@@ -15,12 +15,15 @@ int readBlock(int blockNumber, byte arrayAddress[])
   // this struct needs to be defined for each block.
   // New cards have all A/B= FF FF FF FF FF FF
   // Uid *uid is a pointer to the UID struct that contains the user ID of the card.
-  if (status != MFRC522::STATUS_OK) {
+  if (status != MFRC522::STATUS_OK)
+  {
     Serial.print("PCD_Authenticate(read) [FAILED]");
     Serial.print(mfrc522.GetStatusCodeName(status));
     Serial.print("\n");
-    return 3;//return "3" as error message
-  } else {
+    return 3; //return "3" as error message
+  }
+  else
+  {
     Serial.print("PCD_Authenticate(read) [0K]\n");
   }
   //it appears the authentication needs to be made before every block read/write within a specific sector.
@@ -34,18 +37,20 @@ int readBlock(int blockNumber, byte arrayAddress[])
   // &buffersize is a pointer to the buffersize variable;
   // MIFARE_Read requires a pointer instead of just a number
   status = mfrc522.MIFARE_Read(blockNumber, arrayAddress, &buffersize);
-  if (status != MFRC522::STATUS_OK) {
+  if (status != MFRC522::STATUS_OK)
+  {
     Serial.print("MIFARE_read() [FAILED] ");
     Serial.print(mfrc522.GetStatusCodeName(status));
     Serial.print("\n");
-    return 4;//return "4" as error message
+    return 4; //return "4" as error message
   }
 
   Serial.println("MIFARE_read() [0K]");
   return 1;
 }
 
-void inputBlock(String label, byte *blockcontent) {
+void inputBlock(String label, byte *blockcontent)
+{
   Serial.print("\nType " + label + ", ending with #");
   byte lenght = Serial.readBytesUntil('#', (char *)blockcontent, 18); // read input from serial
 
@@ -53,29 +58,33 @@ void inputBlock(String label, byte *blockcontent) {
     blockcontent[i] = '_'; // pad with spaces
 }
 
-int readBlockContent(int blocknumber, byte *readblock, String &readstring) {
-  int status = readBlock(blocknumber, readblock);//read the block back
-  
-  if (status == 1) {
-    for (int j = 0 ; j < 16 ; j++) //print the block contents
+int readBlockContent(int blocknumber, byte *readblock, String &readstring)
+{
+  int status = readBlock(blocknumber, readblock); //read the block back
+
+  if (status == 1)
+  {
+    for (int j = 0; j < 16; j++) //print the block contents
     {
       //Serial.write() transmits the ASCII numbers as human readable characters to serial monitor
       readstring += (char)readblock[j];
-      Serial.write (readblock[j]);
+      Serial.write(readblock[j]);
     }
 
-    readstring.replace("_","");//Remove all "utils" chars
+    readstring.replace("_", ""); //Remove all "utils" chars
     readstring.trim();
 
     Serial.print("\n");
   }
-  
+
   return status;
 }
 
-void dumpBytetoArray(byte *buffer, byte bufferSize) {
+void dumpBytetoArray(byte *buffer, byte bufferSize)
+{
   //Helper routine to dump a byte array as hex values to Serial.
-  for (byte i = 0; i < bufferSize; i++) {
+  for (byte i = 0; i < bufferSize; i++)
+  {
     Serial.print(buffer[i] < 0x10 ? " 0" : " ");
     Serial.print(buffer[i], HEX);
   }

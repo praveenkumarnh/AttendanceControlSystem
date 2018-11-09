@@ -13,8 +13,8 @@
 #include <SD.h>
 
 #define RST_PIN 6 //MFRC522_RST_PIN
-#define SS_PIN 7 //MFRC522_SS_PIN
-#define SD_PIN 4 //SD_SS_PIN
+#define SS_PIN 7  //MFRC522_SS_PIN
+#define SD_PIN 4  //SD_SS_PIN
 #define ETHERNET_PIN 10
 
 #define LASTNAME_BLOCKNUMBER 60
@@ -35,7 +35,8 @@ void setup()
   Serial.begin(9600);
   Serial.print("\nInitializing serial port...");
 
-  while (!Serial); // Wait until the port is ready
+  while (!Serial)
+    ; // Wait until the port is ready
 
   Serial.print(" [0K]");
 
@@ -64,7 +65,8 @@ void setup()
 
   //tag::prepare-keys[]
   // Prepare key - all keys are set to FFFFFFFFFFFFh at chip delivery from the factory.
-  for (byte i = 0; i < 6; i++) {
+  for (byte i = 0; i < 6; i++)
+  {
     key.keyByte[i] = 0xFF;
   }
   //end::prepare-keys[]
@@ -97,17 +99,18 @@ void loop()
 
   mfrc522.PICC_DumpDetailsToSerial(&(mfrc522.uid)); // Dump some details about the RFID card
 
-  digitalWrite(SS_PIN, LOW); // We got UID now set pin to LOW in order to communicate with SD Module
+  digitalWrite(SS_PIN, LOW);  // We got UID now set pin to LOW in order to communicate with SD Module
   digitalWrite(SD_PIN, HIGH); // Enable SD Module communication
 
+  firstname = "", lastname = "", code = ""; //Clean
 
-  firstname = "", lastname = "" , code = ""; //Clean
+  if (readBlockContent(FIRSTNAME_BLOCKNUMBER, blockcontent, firstname) == 1)
+  {
 
-  if (readBlockContent(FIRSTNAME_BLOCKNUMBER , blockcontent, firstname) == 1) {
+    if (readBlockContent(LASTNAME_BLOCKNUMBER, blockcontent, lastname) == 1)
+    {
 
-    if (readBlockContent(LASTNAME_BLOCKNUMBER , blockcontent, lastname) == 1) {
-
-      readBlockContent(CODE_BLOCKNUMBER , blockcontent, code);
+      readBlockContent(CODE_BLOCKNUMBER, blockcontent, code);
     }
   }
 
