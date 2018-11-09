@@ -19,13 +19,15 @@ int writeBlock(int blockNumber, byte arrayAddress[])
   //tag::authentication-block[]
   byte status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key, &(mfrc522.uid));
 
-  //  byte PCD_Authenticate(byte command, byte blockAddr, MIFARE_Key *key, Uid *uid);
-  //  this method is used to authenticate a certain block for writing or reading
-  //  command: See enumerations above -> PICC_CMD_MF_AUTH_KEY_A	= 0x60 (=1100000), this command performs authentication with Key A
-  //  blockAddr is the number of the block from 0 to 15.
-  //  MIFARE_Key *key is a pointer to the MIFARE_Key struct defined above, this struct needs to be defined for each block.
-  //  New cards have all A/B= FF FF FF FF FF FF
-  //  Uid *uid is a pointer to the UID struct that contains the user ID of the card.
+  // byte PCD_Authenticate(byte command, byte blockAddr, MIFARE_Key *key, Uid *uid);
+  // this method is used to authenticate a certain block for writing or reading
+  // command: See enumerations above -> PICC_CMD_MF_AUTH_KEY_A	= 0x60 (=1100000), 
+  // this command performs authentication with Key A
+  // blockAddr is the number of the block from 0 to 15.
+  // MIFARE_Key *key is a pointer to the MIFARE_Key struct defined above, 
+  // this struct needs to be defined for each block.
+  // New cards have all A/B= FF FF FF FF FF FF
+  // Uid *uid is a pointer to the UID struct that contains the user ID of the card.
 
   if (status != MFRC522::STATUS_OK) {
     Serial.print("PCD_Authenticate() failed: ");
@@ -33,13 +35,15 @@ int writeBlock(int blockNumber, byte arrayAddress[])
     Serial.print("\n");
     return 3;//return "3" as error message
   }
-  // it appears the authentication needs to be made before every block read/write within a specific sector.
+  // it appears the authentication needs to be made before every block 
+  // read/write within a specific sector.
   // If a different sector is being authenticated access to the previous one is lost.
   //end::authentication-block[]
 
   //tag::writing-block[]
 
-  // valueBlockA is the block number, MIFARE_Write(block number (0-15), byte array containing 16 values, number of bytes in block (=16))
+  // valueBlockA is the block number, MIFARE_Write(block number (0-15), 
+  // byte array containing 16 values, number of bytes in block (=16))
   status = mfrc522.MIFARE_Write(blockNumber, arrayAddress, 16);
   //status = mfrc522.MIFARE_Write(9, value1Block, 16);
   if (status != MFRC522::STATUS_OK) {
@@ -67,7 +71,8 @@ int readBlock(int blockNumber, byte arrayAddress[])
   // command: See enumerations above -> PICC_CMD_MF_AUTH_KEY_A	= 0x60 (=1100000),
   // this command performs authentication with Key A
   // blockAddr is the number of the block from 0 to 15.
-  // MIFARE_Key *key is a pointer to the MIFARE_Key struct defined above, this struct needs to be defined for each block.
+  // MIFARE_Key *key is a pointer to the MIFARE_Key struct defined above, 
+  // this struct needs to be defined for each block.
   // New cards have all A/B= FF FF FF FF FF FF
   // Uid *uid is a pointer to the UID struct that contains the user ID of the card.
   if (status != MFRC522::STATUS_OK) {
@@ -121,7 +126,6 @@ void exitMessage() {
   Serial.print("\n**** Take away the RFID-card ****");
   delay(5000); //Some delay to be sure that the current RFID-card was move away
 }
-
 
 void dumpBytetoArray(byte *buffer, byte bufferSize) {
   //Helper routine to dump a byte array as hex values to Serial.
