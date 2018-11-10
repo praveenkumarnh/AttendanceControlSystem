@@ -89,3 +89,28 @@ void dumpBytetoArray(byte *buffer, byte bufferSize)
     Serial.print(buffer[i], HEX);
   }
 }
+
+void userSignal()
+{
+
+  int signals[] = {
+    262, 196, 196, 220, 196, 0, 247, 262
+  };
+
+  int durations[] = {
+    4, 8, 8, 4, 4, 8, 4, 4
+  };
+
+  for (int i = 0; i < 8; i++)
+  {
+
+    int duration = 1500 / durations[i];
+    tone(LED_PIN, signals[i], duration);
+
+    int pause = duration * 1.40;
+    
+    delay(pause);
+
+    noTone(LED_PIN);
+  }
+}

@@ -16,6 +16,7 @@
 #define SS_PIN 7  //MFRC522_SS_PIN
 #define SD_PIN 4  //SD_SS_PIN
 #define ETHERNET_PIN 10
+#define LED_PIN 5
 
 #define LASTNAME_BLOCKNUMBER 60
 #define FIRSTNAME_BLOCKNUMBER 58
@@ -135,7 +136,7 @@ void loop()
     Serial.print(" [FAILED]\n");
   }
   //end::sd-card-write[]
-
+  
   Serial.print(F("\n**** Take away the RFID-card ****"));
-  delay(5000); //Some delay to be sure that the current RFID-card was move away
+  userSignal();  
 }
