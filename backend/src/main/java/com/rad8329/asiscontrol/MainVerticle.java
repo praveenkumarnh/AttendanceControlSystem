@@ -18,6 +18,8 @@ import io.vertx.ext.web.handler.sockjs.BridgeOptions;
 import io.vertx.ext.web.handler.sockjs.PermittedOptions;
 import io.vertx.reactivex.ext.web.handler.sockjs.SockJSHandler;
 
+import java.sql.Timestamp;
+
 public class MainVerticle extends AbstractVerticle {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MainVerticle.class);

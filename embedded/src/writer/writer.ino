@@ -1,14 +1,17 @@
 /**
- * Based on code by Rudy Schlaf 
- * 
- * This sketch uses the MFRC522 Library to use ARDUINO RFID MODULE KIT 13.56 MHZ WITH TAGS SPI (Write/Read)
- */
+   Based on code by Rudy Schlaf
 
-#include <SPI.h>
+   This sketch uses the MFRC522 Library to use ARDUINO RFID MODULE KIT 13.56 MHZ WITH TAGS SPI (Write/Read)
+*/
+
+//#include <SPI.h>
 #include <MFRC522.h>
 
-#define RST_PIN 6
-#define SS_PIN 7
+#define RST_PIN 6 //MFRC522_RST_PIN
+#define SS_PIN 7  //MFRC522_SS_PIN
+#define SD_PIN 4  //SD_SS_PIN
+#define ETHERNET_PIN 10
+#define LED_PIN 5
 
 #define LASTNAME_BLOCKNUMBER 60
 #define FIRSTNAME_BLOCKNUMBER 58
@@ -19,6 +22,20 @@ MFRC522::MIFARE_Key key;
 
 void setup()
 {
+  //tag::spi-hack[]
+  // disable SD SPI
+  pinMode(SD_PIN, OUTPUT);
+  digitalWrite(SD_PIN, HIGH);
+
+  // disable w5100 SPI
+  pinMode(ETHERNET_PIN, OUTPUT);
+  digitalWrite(ETHERNET_PIN, HIGH);
+
+  // disable mfrc522 SPI
+  pinMode(SS_PIN, OUTPUT);
+  digitalWrite(SS_PIN, HIGH);
+  //end::spi-hack[]
+
   //tag::boostrap[]
 
   //Open de serial communication
@@ -32,9 +49,6 @@ void setup()
   SPI.begin();
   Serial.print(" [OK]");
 
-  Serial.print("\nInitializing MFRC522 ...");
-  mfrc522.PCD_Init();
-  Serial.print(" [OK]");
   //end::boostrap[]
 
   //tag::prepare-keys[]
@@ -45,6 +59,7 @@ void setup()
   }
   //end::prepare-keys[]
 
+  mfrc522.PCD_Init();
   Serial.print("]\nScanning for a RFID card (MIFARE Classic PICC) ...\n");
 }
 
@@ -57,60 +72,43 @@ void loop()
   }
   //end::scan-rfid-cards[]
 
-  byte blockcontent[16];
-  byte readbackblock[18];
+  byte firstname_blockcontent[16], lastname_blockcontent[16], code_blockcontent[16];
+  
   MFRC522::StatusCode status;
 
   //tag::rdid-card-details[]
   Serial.print("\nA RFID card was detected...\n");
-  Serial.print("Card UID: ");
 
-  dumpBytetoArray(mfrc522.uid.uidByte, mfrc522.uid.size);
-
-  Serial.print("\nPICC type: ");
   MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
 
-  Serial.println(mfrc522.PICC_GetTypeName(piccType));
   //end::rdid-card-details[]
 
   //tag::check-compatibility[]
-  if (piccType != MFRC522::PICC_TYPE_MIFARE_MINI && piccType != MFRC522::PICC_TYPE_MIFARE_1K && piccType != MFRC522::PICC_TYPE_MIFARE_4K)
+  if (piccType != MFRC522::PICC_TYPE_MIFARE_MINI &&
+      piccType != MFRC522::PICC_TYPE_MIFARE_1K &&
+      piccType != MFRC522::PICC_TYPE_MIFARE_4K)
   {
     Serial.print("\nThis program only works with MIFARE Classic cards.");
-
-    Serial.print("\n**** Take away the RFID-card ****");
-    delay(5000); //Some delay to be sure that the current RFID-card was move away
     return;
   }
   //tag::check-compatibility[]
 
-  Serial.setTimeout(20000L); // wait until 20 seconds for input from serial
+  Serial.setTimeout(10000); // wait until 30 seconds for input from serial
 
-  inputBlock("firstname", blockcontent);
+  bool save = false;
 
-  if (writeBlock(FIRSTNAME_BLOCKNUMBER, blockcontent) == 1)
-  {
-    // we should check if everything was fine, but we could write, then read also
-    displayBlock(FIRSTNAME_BLOCKNUMBER, readbackblock);
-    inputBlock("lastname", blockcontent);
+  inputBlock("firstname", firstname_blockcontent);
+  writeBlock(FIRSTNAME_BLOCKNUMBER, firstname_blockcontent);
 
-    if (writeBlock(LASTNAME_BLOCKNUMBER, blockcontent) == 1)
-    {
-      // we should check if everything was fine, but we could write, then read also
-      displayBlock(LASTNAME_BLOCKNUMBER, readbackblock);
-      inputBlock("code", blockcontent);
+  inputBlock("lastname", lastname_blockcontent);
+  writeBlock(LASTNAME_BLOCKNUMBER, lastname_blockcontent);
 
-      if (writeBlock(CODE_BLOCKNUMBER, blockcontent) == 1)
-      {
-        // we should check if everything was fine, but we could write, then read also
-        displayBlock(CODE_BLOCKNUMBER, readbackblock);
-      }
-    }
-  }
+  inputBlock("code", code_blockcontent);
+  writeBlock(CODE_BLOCKNUMBER, code_blockcontent);
 
   mfrc522.PICC_HaltA();      // Halt PICC
   mfrc522.PCD_StopCrypto1(); // Stop encryption on PCD
 
-  Serial.print("\n**** Take away the RFID-card ****");
-  delay(5000); //Some delay to be sure that the current RFID-card was move away
+  Serial.print("\n!!Take away the RFID-card¡¡");
+  delay(5000);
 }

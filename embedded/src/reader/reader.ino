@@ -1,16 +1,15 @@
 /**
- * Based on code by Rudy Schlaf
- *
- * This sketch uses the MFRC522 Library to use ARDUINO RFID MODULE KIT 13.56 MHZ WITH TAGS SPI (Read).
- *
- * @NOTE We dont need the wire library, but if we remove it, strangely, the MFRC522 stops working. I
- * call it "hack", but I think it's a debt of my knowledge
- */
+   Based on code by Rudy Schlaf
 
-#include <SPI.h>
+   This sketch uses the MFRC522 Library to use ARDUINO RFID MODULE KIT 13.56 MHZ WITH TAGS SPI (Read).
+
+   @NOTE We dont need the wire library, but if we remove it, strangely, the MFRC522 stops working. I
+   call it "hack", but I think it's a debt of my knowledge
+*/
+
 #include <MFRC522.h>
-#include "Wire.h"
 #include <SD.h>
+#include <Ethernet.h>
 
 #define RST_PIN 6 //MFRC522_RST_PIN
 #define SS_PIN 7  //MFRC522_SS_PIN
@@ -23,6 +22,16 @@
 #define CODE_BLOCKNUMBER 61
 #define FILENAME "dtlac.csv"
 
+byte mac[6] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+
+// NOTE: The Vertx server has a static IP address,
+// when we deploy it to production, we need to recompili this sketch
+IPAddress server(192, 168, 1, 56); //Vertx server
+
+IPAddress ip(192, 168, 1, 196);
+IPAddress clientDns(190, 248, 0, 1);
+EthernetClient client;
+
 MFRC522 mfrc522(SS_PIN, RST_PIN); // MFRC522 instance (RFID)
 MFRC522::MIFARE_Key key;
 
@@ -30,28 +39,33 @@ String firstname, lastname, code;
 
 void setup()
 {
+  //tag::spi-hack[]
+  // disable SD SPI
+  pinMode(SD_PIN, OUTPUT);
+  digitalWrite(SD_PIN, HIGH);
+
+  // disable w5100 SPI
+  pinMode(ETHERNET_PIN, OUTPUT);
+  digitalWrite(ETHERNET_PIN, HIGH);
+
+  // disable mfrc522 SPI
+  pinMode(SS_PIN, OUTPUT);
+  digitalWrite(SS_PIN, HIGH);
+  //end::spi-hack[]
+
   //tag::boostrap[]
 
   //Open de serial communication
   Serial.begin(9600);
-  Serial.print("\nInitializing serial port...");
+  Serial.print("\nStarting serial port...");
 
-  while (!Serial)
-    ; // Wait until the port is ready
+  while (!Serial) {
+    // Wait until the port is ready
+  }
 
   Serial.print(" [0K]");
 
-  //tag::spi-hack[]
-  Serial.print("\nSeting MFRC522 PIN on LOW ...");
-  // The SS PIN for the MFRC522 need to init LOW, to prevent SPI protocols conflicts
-  digitalWrite(SS_PIN, LOW);
-  //end::spi-hack[]
-
-  Serial.print("\nInitializing SPI bus...");
-  SPI.begin();
-  Serial.print(" [0K]");
-
-  Serial.print("\nInitializing SD-Card...");
+  Serial.print("\nStarting SD-Card...");
 
   SD.begin(SD_PIN); // Just touch the SD port
 
@@ -72,14 +86,21 @@ void setup()
   }
   //end::prepare-keys[]
 
-  Wire.begin();
-  Serial.print("\nScanning for a RFID card (MIFARE Classic PICC) ...");
+
+  Serial.print("\nStarting Ethernet ... ");
+  Ethernet.begin(mac, ip, clientDns);
+  Serial.print(" [0K]");
+
+  // Give the Ethernet shield a second to initialize
+  delay(1000);
+
+  Serial.print("\nScanning ...");
 }
 
 void loop()
 {
   //tag::spi-hack[]
-  digitalWrite(SS_PIN, LOW);
+  digitalWrite(SS_PIN, LOW);// Enable MFRC522 Module communication
   mfrc522.PCD_Init();
   //end::spi-hack[]
 
@@ -90,43 +111,61 @@ void loop()
   }
   //end::scan-rfid-cards[]
 
-  byte block;
-  byte blockcontent[18];
-  byte length;
-  MFRC522::StatusCode status;
-
-  Serial.print(F("\n------------------------------------------------------"));
-  Serial.print(F("\nA RFID card was detected...\n"));
-
-  mfrc522.PICC_DumpDetailsToSerial(&(mfrc522.uid)); // Dump some details about the RFID card
-
-  digitalWrite(SS_PIN, LOW);  // We got UID now set pin to LOW in order to communicate with SD Module
-  digitalWrite(SD_PIN, HIGH); // Enable SD Module communication
-
-  firstname = "", lastname = "", code = ""; //Clean
-
-  if (readBlockContent(FIRSTNAME_BLOCKNUMBER, blockcontent, firstname) == 1)
+  //byte blockcontent[18], ;
+  byte firstname_blockcontent[18], lastname_blockcontent[18], code_blockcontent[18];
+  
+  /*for (byte i = 0; i < 6; i++)
   {
+    blockcontent[i] = 0xFF;
+  }*/
+  
+  Serial.print("\nCard detected...");
 
-    if (readBlockContent(LASTNAME_BLOCKNUMBER, blockcontent, lastname) == 1)
-    {
+  firstname = "", lastname = "", code = "";
 
-      readBlockContent(CODE_BLOCKNUMBER, blockcontent, code);
-    }
+  firstname = readBlockContent(FIRSTNAME_BLOCKNUMBER, firstname_blockcontent);  
+  lastname = readBlockContent(LASTNAME_BLOCKNUMBER, lastname_blockcontent);  
+  code = readBlockContent(CODE_BLOCKNUMBER, code_blockcontent);
+
+  //code = "2170553";
+
+  Serial.print("\nSending to ");
+  Serial.print(server);
+  Serial.print(" ... ");
+
+  if (client.connect(server, 8083)) {
+
+    String jsonData = "{\"employeeCode\":" + code + "}";
+
+    client.println("POST /api/tracks  HTTP/1.1");
+    client.println("Host: http://192.168.1.56:8083/api/tracks");
+    client.println("Content-Type: application/json");
+    client.println("cache-control: no-cache");
+    client.println("Connection: close");
+    client.print("Content-Length: ");
+    client.println(jsonData.length());
+    client.println();
+    client.print(jsonData);
+
+    client.flush();
+    client.stop();
+
+    Serial.print(" [0K]");
   }
-
-  mfrc522.PICC_HaltA();
-  mfrc522.PCD_StopCrypto1();
+  else {
+    Serial.print(" [FAILED]");
+  }
 
   //tag::sd-card-write[]
   Serial.print("\nWriting on SD-Card ... ");
 
   File dataFile = SD.open(FILENAME, FILE_WRITE);
 
+  Serial.print("[" + firstname + ";" + lastname + ";" + code + "]");
+
   if (dataFile)
   {
-    Serial.print("[" + firstname + ";" + lastname + ";" + code + "]");
-    dataFile.println(firstname + ";" + lastname + ";" + code);
+    dataFile.println("[" + firstname + ";" + lastname + ";" + code + "]");
     dataFile.close();
 
     Serial.print(" [0K]\n");
@@ -136,7 +175,17 @@ void loop()
     Serial.print(" [FAILED]\n");
   }
   //end::sd-card-write[]
+
+  Serial.print("!!Take away the RFID-card¡¡");
+
+  byte S = LOW;
   
-  Serial.print(F("\n**** Take away the RFID-card ****"));
-  userSignal();  
+  for (byte i = 0; i < 5; i++)// 5 seconds
+  {    
+    for(byte j = 0; j < 10; j++){
+      S = (S == LOW) ? HIGH : LOW;
+      digitalWrite(LED_PIN, S);
+      delay(100);
+    }
+  }
 }
