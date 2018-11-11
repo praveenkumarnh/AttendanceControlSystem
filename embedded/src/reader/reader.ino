@@ -3,8 +3,7 @@
 
    This sketch uses the MFRC522 Library to use ARDUINO RFID MODULE KIT 13.56 MHZ WITH TAGS SPI (Read).
 
-   @NOTE We dont need the wire library, but if we remove it, strangely, the MFRC522 stops working. I
-   call it "hack", but I think it's a debt of my knowledge
+   @NOTE I call it "spi-hack", but I think it's a debt of my knowledge
 */
 
 #include <MFRC522.h>
@@ -118,8 +117,6 @@ void loop()
   firstname = readBlockContent(FIRSTNAME_BLOCKNUMBER, firstname_blockcontent);
   lastname = readBlockContent(LASTNAME_BLOCKNUMBER, lastname_blockcontent);
   code = readBlockContent(CODE_BLOCKNUMBER, code_blockcontent);
-
-  //code = "2170553";
 
   Serial.print("\nSending to ");
   Serial.print(server);
