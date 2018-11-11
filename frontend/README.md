@@ -1,29 +1,24 @@
-# hello-world
+# AttendanceControlSystem
 
-## Project setup
-```
+## Setup
+
+```bash
 yarn install
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+## Build
 
-### Compiles and minifies for production
-```
+```bash
 yarn run build
 ```
 
-### Run your tests
-```
-yarn run test
+## Dev
+
+```bash
+yarn run start
 ```
 
-### Lints and fixes files
-```
-yarn run lint
-```
+## FatJar
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+To take advantage of the Vertx web server, we should copy the `/dist` content to `path/to/backend/src/main/resources/webroot/`
+after that, we must build de Vertx project as a fatjar

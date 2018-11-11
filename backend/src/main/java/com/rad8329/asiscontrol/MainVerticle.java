@@ -17,8 +17,11 @@ import io.vertx.reactivex.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.handler.sockjs.BridgeOptions;
 import io.vertx.ext.web.handler.sockjs.PermittedOptions;
 import io.vertx.reactivex.ext.web.handler.sockjs.SockJSHandler;
+import io.vertx.reactivex.ext.web.handler.CorsHandler;
+import io.vertx.core.http.HttpMethod;
 
-import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainVerticle extends AbstractVerticle {
 
@@ -60,6 +63,15 @@ public class MainVerticle extends AbstractVerticle {
 
         HttpServer server = vertx.createHttpServer();
         Router router = Router.router(vertx);
+
+        Set<String> allowedHeaders = new HashSet<>();
+        allowedHeaders.add("x-requested-with");
+        allowedHeaders.add("Access-Control-Allow-Origin");
+        allowedHeaders.add("origin");
+        allowedHeaders.add("Content-Type");
+        allowedHeaders.add("accept");
+
+        router.route().handler(CorsHandler.create("*").allowedHeaders(allowedHeaders));
 
         router.get("/api").handler(this::greetingsHandler);
 

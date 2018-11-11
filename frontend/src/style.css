@@ -1,0 +1,23 @@
+#data-table {
+    width: 100%;
+}
+
+#asiscontrol h1 {
+    margin-top: 35px;
+    margin-bottom: 35px;
+}
+
+.ajs-message.ajs-custom {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #31708f;
+}
+
+.track-entry p{
+    margin: 20px auto 5px auto;
+}
+
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~datatables.net-bs4/css/dataTables.bootstrap4.min.css';
+@import '~alertifyjs/build/css/alertify.min.css';
+@import '~alertifyjs/build/css/themes/bootstrap.min.css';
