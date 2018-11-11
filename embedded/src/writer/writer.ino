@@ -41,7 +41,8 @@ void setup()
   //Open de serial communication
   Serial.begin(9600);
   Serial.print("\nInitializing serial port ...");
-  while (!Serial); // Wait until the port is ready
+  
+  while (!Serial); // Wait until the port is ready    
 
   Serial.print(" [OK]");
 
@@ -73,7 +74,7 @@ void loop()
   //end::scan-rfid-cards[]
 
   byte firstname_blockcontent[16], lastname_blockcontent[16], code_blockcontent[16];
-  
+
   MFRC522::StatusCode status;
 
   //tag::rdid-card-details[]

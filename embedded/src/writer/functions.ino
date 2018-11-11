@@ -69,9 +69,10 @@ int writeBlock(int blockNumber, byte arrayAddress[])
 void inputBlock(String label, byte *blockcontent)
 {
   //memset(blockcontent, 0, sizeof(blockcontent));//Clear blockcontent
-  signed short int  lenght = 0;
-  
-  while (lenght < 1) {
+  signed short int lenght = 0;
+
+  while (lenght < 1)
+  {
     Serial.print("\nType " + label + ", ending with #");
     lenght = Serial.readBytesUntil('#', (char *)blockcontent, 18); // read input from serial
   }

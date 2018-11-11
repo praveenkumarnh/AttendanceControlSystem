@@ -22,7 +22,7 @@
 #define CODE_BLOCKNUMBER 61
 #define FILENAME "dtlac.csv"
 
-byte mac[6] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+byte mac[6] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 
 // NOTE: The Vertx server has a static IP address,
 // when we deploy it to production, we need to recompili this sketch
@@ -59,10 +59,8 @@ void setup()
   Serial.begin(9600);
   Serial.print("\nStarting serial port...");
 
-  while (!Serial) {
-    // Wait until the port is ready
-  }
-
+  while (!Serial);// Wait until the port is ready
+  
   Serial.print(" [0K]");
 
   Serial.print("\nStarting SD-Card...");
@@ -86,7 +84,6 @@ void setup()
   }
   //end::prepare-keys[]
 
-
   Serial.print("\nStarting Ethernet ... ");
   Ethernet.begin(mac, ip, clientDns);
   Serial.print(" [0K]");
@@ -100,7 +97,7 @@ void setup()
 void loop()
 {
   //tag::spi-hack[]
-  digitalWrite(SS_PIN, LOW);// Enable MFRC522 Module communication
+  digitalWrite(SS_PIN, LOW); // Enable MFRC522 Module communication
   mfrc522.PCD_Init();
   //end::spi-hack[]
 
@@ -113,18 +110,13 @@ void loop()
 
   //byte blockcontent[18], ;
   byte firstname_blockcontent[18], lastname_blockcontent[18], code_blockcontent[18];
-  
-  /*for (byte i = 0; i < 6; i++)
-  {
-    blockcontent[i] = 0xFF;
-  }*/
-  
+
   Serial.print("\nCard detected...");
 
   firstname = "", lastname = "", code = "";
 
-  firstname = readBlockContent(FIRSTNAME_BLOCKNUMBER, firstname_blockcontent);  
-  lastname = readBlockContent(LASTNAME_BLOCKNUMBER, lastname_blockcontent);  
+  firstname = readBlockContent(FIRSTNAME_BLOCKNUMBER, firstname_blockcontent);
+  lastname = readBlockContent(LASTNAME_BLOCKNUMBER, lastname_blockcontent);
   code = readBlockContent(CODE_BLOCKNUMBER, code_blockcontent);
 
   //code = "2170553";
@@ -133,8 +125,8 @@ void loop()
   Serial.print(server);
   Serial.print(" ... ");
 
-  if (client.connect(server, 8083)) {
-
+  if (client.connect(server, 8083))
+  {
     String jsonData = "{\"employeeCode\":" + code + "}";
 
     client.println("POST /api/tracks  HTTP/1.1");
@@ -152,7 +144,8 @@ void loop()
 
     Serial.print(" [0K]");
   }
-  else {
+  else
+  {
     Serial.print(" [FAILED]");
   }
 
@@ -179,10 +172,11 @@ void loop()
   Serial.print("!!Take away the RFID-card¡¡");
 
   byte S = LOW;
-  
-  for (byte i = 0; i < 5; i++)// 5 seconds
-  {    
-    for(byte j = 0; j < 10; j++){
+
+  for (byte i = 0; i < 5; i++) // 5 seconds
+  {
+    for (byte j = 0; j < 10; j++)
+    {
       S = (S == LOW) ? HIGH : LOW;
       digitalWrite(LED_PIN, S);
       delay(100);

@@ -53,7 +53,7 @@ String readBlockContent(int blocknumber, byte *readblock)
     {
       readstring += (char)readblock[j];
       //Serial.write(readblock[j]);
-      readblock[j] = 0xFF;// Clean again      
+      readblock[j] = 0xFF; // Clean again
     }
 
     readstring.replace("_", ""); //Remove all "utils" chars
