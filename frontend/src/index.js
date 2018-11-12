@@ -12,28 +12,6 @@ import alertify from "alertifyjs";
 import TableTemplate from "html-loader!./table.html";
 import "./style.css";
 
-$.fn.dataTable.Api.register('row.addByPos()', function (data, index) {
-    const currentPage = this.page();
-
-    //insert the row
-    this.row.add(data);
-
-    //move added row to desired index
-    let rowCount = this.data().length - 1,
-        insertedRow = this.row(rowCount).data(),
-        tempRow;
-
-    for (let i = rowCount; i >= index; i--) {
-        tempRow = this.row(i - 1).data();
-        this.row(i).data(tempRow);
-        this.row(i - 1).data(insertedRow);
-    }
-
-    //refresh the current page
-    this.page(currentPage).draw(false);
-});
-
-
 (function () {
     let _url = "http://192.168.1.56:8083";
     let _table;
@@ -109,7 +87,8 @@ $.fn.dataTable.Api.register('row.addByPos()', function (data, index) {
                             <strong>${msg.body.firstName} ${msg.body.lastName}</strong> acaba de ${action}
                         </p>
                     </div>\n`,
-                    msg.body.action,
+                    msg.body.action
+                    ,
                     5
                 );
             });
