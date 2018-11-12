@@ -80,17 +80,14 @@ import "./style.css";
                     "action": _actions[msg.body.action]
                 }).draw();
 
-                alertify.notify(
-                    `<div class="track-entry text-center">
+                const html = `<div class="track-entry text-center">
                         <img class="rounded mx-auto d-block" src="${msg.body.avatar}"/>
                         <p>
                             <strong>${msg.body.firstName} ${msg.body.lastName}</strong> acaba de ${action}
                         </p>
-                    </div>\n`,
-                    msg.body.action
-                    ,
-                    5
-                );
+                    </div>\n`;
+
+                alertify.notify(html, msg.body.action, 5);
             });
         };
     }
