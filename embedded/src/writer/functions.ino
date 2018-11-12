@@ -8,7 +8,9 @@ int writeBlock(int blockNumber, byte arrayAddress[])
   Serial.print("\n");
   if (blockNumber > 2 && (blockNumber + 1) % 4 == 0)
   {
-    Serial.print(blockNumber); //block number is a trailer block (modulo 4); quit and send error code 2
+    //block number is a trailer block (modulo 4); quit and send error code 2
+    //beware, I have damaged 2 cards before I realized this
+    Serial.print(blockNumber); 
     Serial.print(" is a trailer block.");
     return 2;
   }
@@ -47,7 +49,6 @@ int writeBlock(int blockNumber, byte arrayAddress[])
   //end::authentication-block[]
 
   //tag::writing-block[]
-
   // valueBlockA is the block number, MIFARE_Write(block number (0-15),
   // byte array containing 16 values, number of bytes in block (=16))
   status = mfrc522.MIFARE_Write(blockNumber, arrayAddress, 16);
@@ -67,8 +68,7 @@ int writeBlock(int blockNumber, byte arrayAddress[])
 }
 
 void inputBlock(String label, byte *blockcontent)
-{
-  //memset(blockcontent, 0, sizeof(blockcontent));//Clear blockcontent
+{  
   signed short int lenght = 0;
 
   while (lenght < 1)
@@ -78,5 +78,5 @@ void inputBlock(String label, byte *blockcontent)
   }
 
   for (byte i = lenght; i < 18; i++)
-    blockcontent[i] = '_'; // pad with spaces
+    blockcontent[i] = '_'; // pad with underscore
 }

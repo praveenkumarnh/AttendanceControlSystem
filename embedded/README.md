@@ -18,6 +18,3 @@ Arduino UNO did't allow it, the RAM memory became unstable; then in the future w
 ![schematics](https://raw.githubusercontent.com/rad8329/AttendanceControlSystem/master/embedded/schematics/fritzing_bb.png)
 
 
-## Clarification
-
-The SD card will be use just in the release `local-store`

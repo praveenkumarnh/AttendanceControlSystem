@@ -12,18 +12,34 @@ import alertify from "alertifyjs";
 import TableTemplate from "html-loader!./table.html";
 import "./style.css";
 
-let Asiscontrol = (function () {
-    let _url;
+$.fn.dataTable.Api.register('row.addByPos()', function (data, index) {
+    const currentPage = this.page();
+
+    //insert the row
+    this.row.add(data);
+
+    //move added row to desired index
+    let rowCount = this.data().length - 1,
+        insertedRow = this.row(rowCount).data(),
+        tempRow;
+
+    for (let i = rowCount; i >= index; i--) {
+        tempRow = this.row(i - 1).data();
+        this.row(i).data(tempRow);
+        this.row(i - 1).data(insertedRow);
+    }
+
+    //refresh the current page
+    this.page(currentPage).draw(false);
+});
+
+
+(function () {
+    let _url = "http://192.168.1.56:8083";
     let _table;
     const _actions = {"entrance": "Entró", "exit": "Salió"};
 
-    function Asiscontrol(url) {
-        _url = url;
-
-        init();
-    }
-
-    function init() {
+    function Asiscontrol() {
         rendertable();
         registerEventBus();
         loadRecords();
@@ -32,6 +48,8 @@ let Asiscontrol = (function () {
     function rendertable() {
         $("body").html(TableTemplate);
         _table = $('#data-table').DataTable({
+            "order": [[4, "desc"]],
+            rowReorder: true,
             "language": {
                 "sProcessing": "Procesando...",
                 "sLengthMenu": "Mostrar _MENU_ registros",
@@ -91,7 +109,7 @@ let Asiscontrol = (function () {
                             <strong>${msg.body.firstName} ${msg.body.lastName}</strong> acaba de ${action}
                         </p>
                     </div>\n`,
-                    'custom',
+                    msg.body.action,
                     5
                 );
             });
@@ -103,14 +121,16 @@ let Asiscontrol = (function () {
             url: _url + "/api/tracks",
             success: function (result, status) {
                 if (result.hasOwnProperty('success') && result.success) {
-                    result.tracks.forEach(data => _table.row.add({
-                            "code": data.employee.code,
-                            "firstname": data.employee.firstName,
-                            "lastname": data.employee.lastName,
-                            "email": data.employee.email,
-                            "createdAt": data.track.createdAt,
-                            "action": _actions[data.track.action]
-                        }).draw()
+                    result.tracks.forEach(data => {
+                            _table.row.add({
+                                "code": data.employee.code,
+                                "firstname": data.employee.firstName,
+                                "lastname": data.employee.lastName,
+                                "email": data.employee.email,
+                                "createdAt": data.track.createdAt,
+                                "action": _actions[data.track.action]
+                            }).draw();
+                        }
                     );
                 }
             }
@@ -118,6 +138,4 @@ let Asiscontrol = (function () {
     }
 
     return Asiscontrol;
-}());
-
-new Asiscontrol("http://192.168.1.56:8083");
+}())();

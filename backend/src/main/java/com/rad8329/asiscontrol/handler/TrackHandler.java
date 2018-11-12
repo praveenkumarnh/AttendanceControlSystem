@@ -62,9 +62,12 @@ public final class TrackHandler extends RequestHandler {
                                     //Send a message to the subscribers
                                     repository.rxFetchByid(track.getId(), arf -> {
                                         if (arf.succeeded()) {
+                                            JsonObject result = arf.result();
+                                            result.put("createdAt", formatter.format(result.getInstant("createdAt")));
+
                                             getVertx()
                                                     .eventBus()
-                                                    .publish("tracked.employee", arf.result());
+                                                    .publish("tracked.employee", result);
                                         }
                                     });
 

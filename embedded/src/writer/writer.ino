@@ -1,10 +1,9 @@
 /**
    Based on code by Rudy Schlaf
 
-   This sketch uses the MFRC522 Library to use ARDUINO RFID MODULE KIT 13.56 MHZ WITH TAGS SPI (Write/Read)
+   This sketch uses the MFRC522 Library to use ARDUINO RFID MODULE KIT 13.56 MHZ WITH TAGS SPI (Write)
 */
 
-//#include <SPI.h>
 #include <MFRC522.h>
 
 #define RST_PIN 6 //MFRC522_RST_PIN
@@ -94,9 +93,7 @@ void loop()
   }
   //tag::check-compatibility[]
 
-  Serial.setTimeout(10000); // wait until 30 seconds for input from serial
-
-  bool save = false;
+  Serial.setTimeout(20000); // wait until 20 seconds for input from serial
 
   inputBlock("firstname", firstname_blockcontent);
   writeBlock(FIRSTNAME_BLOCKNUMBER, firstname_blockcontent);

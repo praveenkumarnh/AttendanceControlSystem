@@ -14,8 +14,6 @@
  *   You may elect to redistribute this code under either of these licenses.
  */
 
-'use strict';
-
 import 'sockjs';
 
 function makeUUID() {
@@ -30,7 +28,7 @@ function mergeHeaders(defaultHeaders, headers) {
             return defaultHeaders;
         }
 
-        for (var headerName in defaultHeaders) {
+        for (let headerName in defaultHeaders) {
             if (defaultHeaders.hasOwnProperty(headerName)) {
                 // user can overwrite the default headers
                 if (typeof headers[headerName] === 'undefined') {

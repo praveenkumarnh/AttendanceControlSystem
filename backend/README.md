@@ -2,6 +2,11 @@
 
 Simple API built on top of Vert.x
 
+## Features
+
+- Reactive
+- EventBus to avoid communication via HTTP
+
 ## Endpoints
 
 ### Tracks

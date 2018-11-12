@@ -3,7 +3,7 @@
 
    This sketch uses the MFRC522 Library to use ARDUINO RFID MODULE KIT 13.56 MHZ WITH TAGS SPI (Read).
 
-   @NOTE I call it "spi-hack", but I think it's a debt of my knowledge
+   NOTE: I call some chunks as "spi-hack", but I think it's a debt of my knowledge
 */
 
 #include <MFRC522.h>
@@ -106,8 +106,7 @@ void loop()
     return;
   }
   //end::scan-rfid-cards[]
-
-  //byte blockcontent[18], ;
+  
   byte firstname_blockcontent[18], lastname_blockcontent[18], code_blockcontent[18];
 
   Serial.print("\nCard detected...");
