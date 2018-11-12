@@ -22,8 +22,8 @@ yarn run build
 yarn run start
 ```
 
-## FatJar
+## Deploy
 
 To take advantage of the Vertx web server, we should copy 
-the `/dist` content to `path/to/backend/src/main/resources/webroot/`
-after that, we must build de Vertx project as a fatjar
+the `/dist` content to `path/to/backend/src/main/resources/webroot/`,
+after that we must build the Vertx project as a fatjar
