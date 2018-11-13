@@ -24,6 +24,6 @@ yarn run start
 
 ## Deploy
 
-To take advantage of the Vertx web server, we should copy 
+To take advantage of the Vertx web server, the build task copy copy 
 the `/dist` content to `path/to/backend/src/main/resources/webroot/`,
-after that we must build the Vertx project as a fatjar
+after that we must build the Vertx project as a FatJar

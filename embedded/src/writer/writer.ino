@@ -1,8 +1,8 @@
 /**
-   Based on code by Rudy Schlaf
-
-   This sketch uses the MFRC522 Library to use ARDUINO RFID MODULE KIT 13.56 MHZ WITH TAGS SPI (Write)
-*/
+ * Based on code by Rudy Schlaf
+ *
+ * This sketch uses the MFRC522 Library to use ARDUINO RFID MODULE KIT 13.56 MHZ WITH TAGS SPI (Write)
+ */
 
 #include <MFRC522.h>
 

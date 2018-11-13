@@ -13,9 +13,14 @@ Simple API built on top of Vert.x
 
 `GET` /tracks
 
-`POST` /tracks/
-```
-    curl --request GET -url 'http://localhost:8083/api/tracks'
+`POST` /tracks
+```curl
+    curl -X POST \
+      http://localhost:8083/api/tracks \
+      -H 'Content-Type: application/json' \           
+      -d '{
+            "employeeCode": 2170554
+          }'
 ```
 
 `GET` /tracks/:employee_code `employee_code=[integer]`
@@ -23,31 +28,31 @@ Simple API built on top of Vert.x
 ### Employee
 
 `POST` /employees/
-```
-    curl --request POST \
-         --url 'http://localhost:8083/api/employees' \
-         --header 'Content-Type: application/json' \
-         --data '{
-                "code": 21705538,
-                "firstName": "Ruben",
-                "lastName": "Aguirre",
-                "email": "Ruben+6@gmail.com",
-                "avatar": null
-        }'
+```curl
+    curl -X POST \
+      http://localhost:8083/api/employees \
+      -H 'Content-Type: application/json' \
+      -d '{
+            "code": 21705538,
+            "firstName": "Jufith",
+            "lastName": "Bustamante",
+            "email": "rad83+6@gmail.com",
+            "avatar": "https://api.randomuser.me/portraits/men/10.jpg"
+          }'
 ```
 
 `PUT` /employees/:code `code=[integer]`
-```
-    curl --request PUT \
-         --url 'http://localhost:8083/api/employees/2170555' \
-         --header 'Content-Type: application/json' \
-         --data '{
+```curl
+    curl -X PUT \
+      http://localhost:8083/api/employees/2170555 \
+      -H 'Content-Type: application/json' \
+      -d '{
             "code": 2170553,
-            "firstName": "Ramón",
-            "lastName": "Valdez",
-            "email": "moncho+3@gmail.com",
-            "avatar": null
-        }'
+            "firstName": "Angelines",
+            "lastName": "Fernández",
+            "email": "rad8329+3@gmail.com",
+            "avatar": "https://api.randomuser.me/portraits/women/10.jpg"
+          }'
 ```
 
 `GET`  /employees/:code `code=[integer]`
@@ -55,3 +60,11 @@ Simple API built on top of Vert.x
 `GET` /employees
 
 `DELETE` /employees/:code `code=[integer]`
+
+## EventBus
+
+`WS` /eventbus/*
+
+### Addresses
+
+`tracked.employee`

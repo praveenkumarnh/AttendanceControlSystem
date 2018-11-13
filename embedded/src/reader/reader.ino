@@ -1,10 +1,10 @@
 /**
-   Based on code by Rudy Schlaf
-
-   This sketch uses the MFRC522 Library to use ARDUINO RFID MODULE KIT 13.56 MHZ WITH TAGS SPI (Read).
-
-   NOTE: I call some chunks as "spi-hack", but I think it's a debt of my knowledge
-*/
+ * Based on code by Rudy Schlaf
+ *
+ * This sketch uses the MFRC522 Library to use ARDUINO RFID MODULE KIT 13.56 MHZ WITH TAGS SPI (Read).
+ *
+ * NOTE: I call some chunks as "spi-hack", but I think it's a debt of my knowledge
+ */
 
 #include <MFRC522.h>
 #include <SD.h>
@@ -24,7 +24,7 @@
 byte mac[6] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 
 // NOTE: The Vertx server has a static IP address,
-// when we deploy it to production, we need to recompili this sketch
+// when we deploy it to production, we need to recompile this sketch
 IPAddress server(192, 168, 1, 56); //Vertx server
 
 IPAddress ip(192, 168, 1, 196);
