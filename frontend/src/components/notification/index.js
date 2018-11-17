@@ -1,6 +1,7 @@
 import alertify from "alertifyjs";
 
 import {TableHandler} from "../tracks";
+import "./index.css";
 
 export default class Notification {
 
