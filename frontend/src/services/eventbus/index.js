@@ -14,7 +14,7 @@
  *   You may elect to redistribute this code under either of these licenses.
  */
 
-import 'sockjs';
+import SockJS from 'sockjs-client';
 
 function makeUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (a, b) {
@@ -286,6 +286,4 @@ EventBus.OPEN = 1;
 EventBus.CLOSING = 2;
 EventBus.CLOSED = 3;
 
-export {
-    EventBus
-};
+export default EventBus;

@@ -17,7 +17,9 @@
     "html-loader": "^0.5.5",
     "jquery": "^3.3.1",
     "lodash": "^4.17.11",
-    "style-loader": "^0.23.1"
+    "sockjs-client": "^1.3.0",
+    "style-loader": "^0.23.1",
+    "webpack-merge": "^4.1.4"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^0.1.19",
@@ -27,8 +29,8 @@
     "webpack-dev-server": "^3.1.10"
   },
   "scripts": {
-    "start": "webpack-dev-server --mode development",
-    "dev": "webpack --mode development",
-    "build": "yarn webpack --mode production && cp -Rf ./dist/* ../backend/src/main/resources/webroot && echo \"Vertx webroot built done\""
+    "start": "webpack-dev-server --config webpack.dev.js",
+    "dev": "webpack --config webpack.dev.js",
+    "build": "yarn webpack --config webpack.prod.js && cp -Rf ./dist/* ../backend/src/main/resources/webroot && echo \"Vertx webroot built done\""
   }
 }

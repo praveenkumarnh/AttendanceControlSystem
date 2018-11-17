@@ -15,7 +15,6 @@ module.exports = {
             chunks: 'all'
         }
     },
-    devtool: 'inline-source-map',
     plugins: [
         new CleanWebpackPlugin([dist]),
         new HtmlWebpackPlugin({
@@ -23,21 +22,21 @@ module.exports = {
         })
     ],
     output: {
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
         path: path.resolve(__dirname, dist)
     },
     resolve: {
-        alias: {
-            'vertx-eventbus': path.resolve(__dirname, 'src/vertx-eventbus.js'),
-            'sockjs': path.resolve(__dirname, 'src/sockjs.js')
-        }
+        extensions: ['.js']
     },
-    module:{
-        rules:[
+    module: {
+        rules: [
             {
-                test:/\.css$/,
-                use:['style-loader','css-loader']
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader']
             }
-        ]
+        ],
+    },
+    stats: {
+        colors: true
     },
 };

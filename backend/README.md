@@ -7,6 +7,20 @@ Simple API built on top of Vert.x
 - Reactive
 - EventBus to avoid communication via HTTP
 
+## Requirements
+
+- Mysql 5.X
+- JDK 8 
+- Maven
+
+## Setup
+
+- Import the DDL script `./src/main/resources/database/migrations/V1_all_schema.sql`
+- Configure the DSN on the file `./src/main/conf/my-application-conf.json`
+- And the last one, we need to run the next command:
+
+    $ mvn vertx:run
+
 ## Endpoints
 
 ### Tracks

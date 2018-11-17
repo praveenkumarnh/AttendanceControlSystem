@@ -23,9 +23,9 @@
 
 byte mac[6] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 
-// NOTE: The Vertx server has a static IP address,
+// NOTE: The Vertx server has a static IP address, 
 // when we deploy it to production, we need to recompile this sketch
-IPAddress server(192, 168, 1, 56); //Vertx server
+IPAddress server(192, 168, 1, 156); //Vertx server
 
 IPAddress ip(192, 168, 1, 196);
 IPAddress clientDns(190, 248, 0, 1);
