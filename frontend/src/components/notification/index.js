@@ -1,10 +1,19 @@
 import alertify from "alertifyjs";
-
-import {TableHandler} from "../tracks";
+import { TableHandler } from "../tracks";
 import "./index.css";
 
 export default class Notification {
 
+    /**
+     * 
+     * @param {Number} code 
+     * @param {String} firstName 
+     * @param {String} lastName 
+     * @param {String} email 
+     * @param {String} action 
+     * @param {String} createdAt 
+     * @param {String} avatar 
+     */
     constructor(code, firstName, lastName, email, action, createdAt, avatar) {
 
         const type = action === 'entrance' ? 'entrar' : 'salir';

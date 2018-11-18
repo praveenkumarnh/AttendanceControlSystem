@@ -1,16 +1,12 @@
-import {Config} from "./config";
-import EventBus from "./services/eventbus/index";
-
 import Home from "./components/home";
 import Notification from "./components/notification/index";
+import { Config } from "./config";
+import EventBus from "./services/eventbus/index";
 
 (function () {
     function Bootstrap() {
         Home.render();
-        registerEventBusHandler();
-    }
-
-    function registerEventBusHandler() {
+        
         const eventBus = new EventBus(Config.apiUrl + "/eventbus/");
 
         eventBus.onopen = function () {

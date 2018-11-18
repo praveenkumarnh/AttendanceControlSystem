@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import jQuery from 'jquery';
 import TrackService from "../../services/tracks";
 
 import 'datatables.net-bs4';
@@ -9,16 +9,21 @@ import 'datatables.net-select-bs4';
 import view from "html-loader!./index.html";
 import "./index.css";
 
-const actions = {"entrance": "Entró", "exit": "Salió"};
+const actions = {
+    "entrance": "Entró",
+    "exit": "Salió"
+};
 
 let TableHandler;
 
 class Tracks {
     static render() {
-        $("data-table").append(view);
+        jQuery("data-table").append(view);
 
-        TableHandler = $('#track-list').DataTable({
-            "order": [[4, "desc"]],
+        TableHandler = jQuery('#track-list').DataTable({
+            "order": [
+                [4, "desc"]
+            ],
             rowReorder: true,
             "language": {
                 "sProcessing": "Procesando...",
@@ -44,13 +49,26 @@ class Tracks {
                     "sSortDescending": ": Activar para ordenar la columna de manera descendente"
                 }
             },
-            columns: [
-                {data: 'code', width: "50px"},
-                {data: 'firstname'},
-                {data: 'lastname'},
-                {data: 'email'},
-                {data: 'createdAt'},
-                {data: 'action', width: "30px"}
+            columns: [{
+                    data: 'code',
+                    width: "50px"
+                },
+                {
+                    data: 'firstname'
+                },
+                {
+                    data: 'lastname'
+                },
+                {
+                    data: 'email'
+                },
+                {
+                    data: 'createdAt'
+                },
+                {
+                    data: 'action',
+                    width: "30px"
+                }
             ]
         });
 
@@ -59,21 +77,23 @@ class Tracks {
 
     static fecthAll() {
         TrackService.fetchAll().done(function (tracks) {
+            TableHandler.clear().draw();
+
             tracks.forEach(data => {
-                    TableHandler.row.add({
-                        "code": data.employee.code,
-                        "firstname": data.employee.firstName,
-                        "lastname": data.employee.lastName,
-                        "email": data.employee.email,
-                        "createdAt": data.track.createdAt,
-                        "action": actions[data.track.action]
-                    }).draw();
-                }
-            );
+                TableHandler.row.add({
+                    "code": data.employee.code,
+                    "firstname": data.employee.firstName,
+                    "lastname": data.employee.lastName,
+                    "email": data.employee.email,
+                    "createdAt": data.track.createdAt,
+                    "action": actions[data.track.action]
+                }).draw();
+            });
         });
     }
 }
 
 export {
-    TableHandler, Tracks
+    TableHandler,
+    Tracks
 };

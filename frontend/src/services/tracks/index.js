@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import {Config} from "../../config";
+import { Config } from "../../config";
 
 export default class TrackService {
     static fetchAll() {
